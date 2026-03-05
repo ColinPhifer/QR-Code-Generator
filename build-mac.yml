@@ -1,0 +1,28 @@
+name: Build Mac App
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install pyinstaller qrcode pillow reportlab
+      
+      - name: Build app
+        run: |
+          pyinstaller qr_code_generator.spec
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: qr-generator-mac
+          path: dist/qr_code_generator.app
